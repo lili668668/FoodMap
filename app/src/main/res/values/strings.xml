@@ -8,4 +8,5 @@
         <item>Store5</item>
         <item>Store6</item>
     </string-array>
+    <string name="title_activity_food_maps">美食地圖</string>
 </resources>
