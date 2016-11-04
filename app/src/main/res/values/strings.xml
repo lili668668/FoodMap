@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">FoodMap</string>
+    <string-array name="list_content">
+        <item>Store1</item>
+        <item>Store2</item>
+        <item>Store3</item>
+        <item>Store4</item>
+        <item>Store5</item>
+        <item>Store6</item>
+    </string-array>
 </resources>
