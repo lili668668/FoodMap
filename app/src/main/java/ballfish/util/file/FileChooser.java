@@ -11,6 +11,10 @@ import android.os.Build;
 import java.io.File;
 import java.util.List;
 
+/**
+ * 用來選取Android手機資料的類別
+ */
+
 public class FileChooser {
     public static final int ACTIVITY_FILE_CHOOSER = 143;
     private Activity activity;

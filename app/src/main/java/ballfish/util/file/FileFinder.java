@@ -13,6 +13,10 @@ import android.provider.MediaStore;
 import java.io.File;
 import java.util.ArrayList;
 
+/**
+ * 用來找尋選取到的資料的路徑
+ */
+
 public class FileFinder {
     public static final String EXTRA_STORAGE = "com.android.externalstorage.documents";
     public static final String DOWNLOAD_DIRECTYORY = "com.android.providers.downloads.documents";

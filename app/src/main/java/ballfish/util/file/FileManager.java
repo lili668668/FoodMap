@@ -9,6 +9,11 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 
+/**
+ * 實作處理Android一些較為複雜的檔案處理
+ */
+
+
 public class FileManager {
     // 手機內部資料夾的根節點
     public static final String ROOTPATH = Environment.getExternalStorageDirectory().getAbsolutePath();
