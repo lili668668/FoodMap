@@ -45,4 +45,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         navLayout.closeDrawer(GravityCompat.START);
         return true;
     }
+
+    @Override
+    public void onBackPressed() {
+        if (navLayout.isDrawerOpen(GravityCompat.START)) {
+            navLayout.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
+        }
+    }
 }
