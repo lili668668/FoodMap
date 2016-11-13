@@ -1,5 +1,7 @@
 package scu.csim.student.foodmap;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -12,11 +14,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private DrawerLayout navLayout;
     private NavigationView navView;
+    private Context context = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        context = getApplicationContext();
 
         navLayout = (DrawerLayout) findViewById(R.id.nav_layout);
         navView = (NavigationView) findViewById(R.id.nav_view);
@@ -28,17 +33,21 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
 
+        // 美食地圖
         if (id == R.id.nav_camera) {
-            // Handle the camera action
+            Intent intent = new Intent(context, List.class);
+            startActivity(intent);
+
+        // 美食清單
         } else if (id == R.id.nav_gallery) {
 
+
+        // 今天吃什麼？
         } else if (id == R.id.nav_slideshow) {
 
+
+        // 設定
         } else if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
 
         }
 
