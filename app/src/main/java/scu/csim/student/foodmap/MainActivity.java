@@ -35,12 +35,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         // 美食地圖
         if (id == R.id.nav_camera) {
-            Intent intent = new Intent(context, List.class);
-            startActivity(intent);
+
 
         // 美食清單
         } else if (id == R.id.nav_gallery) {
-
+            Intent intent = new Intent(context, List.class);
+            startActivity(intent);
 
         // 今天吃什麼？
         } else if (id == R.id.nav_slideshow) {
