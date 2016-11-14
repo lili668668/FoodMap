@@ -39,6 +39,8 @@ public class DiceActivity extends AppCompatActivity {
         setContentView(R.layout.activity_dice);
 
         one = (ImageView) findViewById(R.id.one);
+        rest = (TextView) findViewById(R.id.rest);
+
         //取得體感(Sensor)服務使用權限
         mSensorManager = (SensorManager) this.getSystemService(Context.SENSOR_SERVICE);
 
@@ -51,6 +53,8 @@ public class DiceActivity extends AppCompatActivity {
 
     public SensorEventListener SensorListener = new SensorEventListener()
     {
+        // 慈吟：養成好習慣，在Java裡面，需要覆寫的method，需要加@Override
+        @Override
         public void onSensorChanged(SensorEvent mSensorEvent)
         {
             //當前觸發時間
@@ -102,10 +106,12 @@ public class DiceActivity extends AppCompatActivity {
     };
 
     private void RandomNumber(){
-        rest = (TextView) findViewById(R.id.rest);
         //隨機10個數字
         int r = (int)(Math.random()*10 + 1);
-        rest.setText(r);
+
+        // 慈吟：型態不對，他Crash了
+        // r是int不是string
+        rest.setText(r + "");
     }
 
     @Override

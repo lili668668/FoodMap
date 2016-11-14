@@ -97,7 +97,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         // 今天吃什麼？
         } else if (id == R.id.nav_slideshow) {
-
+            Intent intent = new Intent(context, DiceActivity.class);
+            startActivity(intent);
 
         // 設定
         } else if (id == R.id.nav_manage) {
