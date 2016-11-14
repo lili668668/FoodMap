@@ -72,12 +72,14 @@ public class List extends AppCompatActivity implements NavigationView.OnNavigati
 
             // 美食清單
         } else if (id == R.id.nav_gallery) {
-
+            navLayout.closeDrawer(GravityCompat.START);
+            return true;
 
             // 今天吃什麼？
         } else if (id == R.id.nav_slideshow) {
             Intent intent = new Intent(context, DiceActivity.class);
             startActivity(intent);
+            finish();
 
             // 設定
         } else if (id == R.id.nav_manage) {

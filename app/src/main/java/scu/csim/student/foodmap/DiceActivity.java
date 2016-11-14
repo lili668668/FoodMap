@@ -1,8 +1,13 @@
 package scu.csim.student.foodmap;
 
+import android.support.annotation.NonNull;
+import android.support.design.widget.NavigationView;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.widget.ImageView;
 import android.graphics.drawable.RippleDrawable;
 import android.content.Context;
@@ -13,7 +18,14 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.widget.TextView;
 
-public class DiceActivity extends AppCompatActivity {
+import com.google.android.gms.maps.OnMapReadyCallback;
+
+public class DiceActivity extends AppCompatActivity  implements NavigationView.OnNavigationItemSelectedListener{
+
+    // 側邊欄
+    private DrawerLayout navLayout;
+    private NavigationView navView;
+    private Context context;
 
     private ImageView one;  //表示抽起來的籤(抽到時上移,再想想)
     private TextView rest;  //表示抽到的餐廳名
@@ -36,10 +48,16 @@ public class DiceActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_dice);
+        setContentView(R.layout.activity_dice_with_drawer);
 
         one = (ImageView) findViewById(R.id.one);
         rest = (TextView) findViewById(R.id.rest);
+
+        // 側邊欄
+        navLayout = (DrawerLayout) findViewById(R.id.activity_dice_with_drawer);
+        navView = (NavigationView) findViewById(R.id.nav_dice_view);
+        navView.setNavigationItemSelectedListener(this);
+        context = getApplicationContext();
 
         //取得體感(Sensor)服務使用權限
         mSensorManager = (SensorManager) this.getSystemService(Context.SENSOR_SERVICE);
@@ -122,4 +140,45 @@ public class DiceActivity extends AppCompatActivity {
         mSensorManager.unregisterListener(SensorListener);
     }
 
+    // 慈吟：在詩堯的清單裡加入側邊欄
+    @SuppressWarnings("StatementWithEmptyBody")
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        int id = item.getItemId();
+
+        // 美食地圖
+        if (id == R.id.nav_camera) {
+            Intent intent = new Intent(context, MainActivity.class);
+            startActivity(intent);
+            this.finish();
+
+            // 美食清單
+        } else if (id == R.id.nav_gallery) {
+            Intent intent = new Intent(context, List.class);
+            startActivity(intent);
+            this.finish();
+
+            // 今天吃什麼？
+        } else if (id == R.id.nav_slideshow) {
+            navLayout.closeDrawer(GravityCompat.START);
+            return true;
+
+            // 設定
+        } else if (id == R.id.nav_manage) {
+
+        }
+
+        navLayout.closeDrawer(GravityCompat.START);
+        return true;
+    }
+
+    // 慈吟：在詩堯的清單裡加入側邊欄
+    @Override
+    public void onBackPressed() {
+        if (navLayout.isDrawerOpen(GravityCompat.START)) {
+            navLayout.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
+        }
+    }
 }
