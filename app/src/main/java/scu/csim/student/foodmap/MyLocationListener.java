@@ -1,6 +1,7 @@
 package scu.csim.student.foodmap;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
 import android.widget.Toast;
@@ -69,6 +70,8 @@ public class MyLocationListener implements android.location.LocationListener {
             if (flag) {
                 flag = false;
                 LatLng test = Helper.getLatLngByAddress("100台北市中正區貴陽街一段56號");
+                Directions.lineColor = Color.RED;
+                Directions.lineWidth = 10;
                 Directions.getInstance().draw(context, nowLat, test, map, Directions.MODE_TRANSIT);
             }
         }

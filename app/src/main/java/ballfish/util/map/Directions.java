@@ -36,6 +36,9 @@ public class Directions {
     public final static String MODE_BICYCLING = "bicycling";
     public final static String MODE_TRANSIT = "transit";
 
+    public static int lineWidth = 5;
+    public static int lineColor = Color.BLUE;
+
     private Directions() {}
     private static Directions _instance = new Directions();
     public static Directions getInstance() {
@@ -170,8 +173,8 @@ public class Directions {
                 }
                 // 繪製折線點經緯度集合
                 lineOptions.addAll(points);
-                lineOptions.width(5); // 導航路徑寬度
-                lineOptions.color(Color.BLUE); // 導航路徑顏色
+                lineOptions.width(lineWidth); // 導航路徑寬度
+                lineOptions.color(lineColor); // 導航路徑顏色
             }
             if(lineOptions != null) {
                 map.addPolyline(lineOptions);
