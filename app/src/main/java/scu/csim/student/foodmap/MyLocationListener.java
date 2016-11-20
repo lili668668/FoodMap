@@ -14,6 +14,9 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import ballfish.util.map.Directions;
+import ballfish.util.map.Helper;
+
 /**
  * GPS實作
  */
@@ -24,8 +27,17 @@ public class MyLocationListener implements android.location.LocationListener {
     private CameraPosition cameraPosition;
     private Marker nowMarker;
 
+    private LatLng mySchool;
+
+    private boolean flag = true;
+
     public MyLocationListener(Context context) {
         this.context = context;
+    }
+
+    public MyLocationListener(Context context, LatLng test) {
+        this.context = context;
+        mySchool = test;
     }
 
     @Override
@@ -54,9 +66,14 @@ public class MyLocationListener implements android.location.LocationListener {
                 map.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
             }
 
+            if (flag) {
+                flag = false;
+                LatLng test = Helper.getLatLngByAddress("100台北市中正區貴陽街一段56號");
+                Directions.getInstance().draw(context, nowLat, test, map, Directions.MODE_TRANSIT);
+            }
         }
 
-        String str = "緯度" + location.getLatitude() + " 經度" + location.getLongitude() + " 標高" + location.getAltitude() + " 方位" + location.getBearing();
+        String str = "緯度" + latitude + " 經度" + longitude + " 標高" + location.getAltitude() + " 方位" + location.getBearing();
         Toast.makeText(context, str, Toast.LENGTH_SHORT).show();
     }
 
