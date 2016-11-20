@@ -7,7 +7,9 @@ import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 /**
@@ -24,13 +26,15 @@ public class MyLocationListener implements android.location.LocationListener {
 
     @Override
     public void onLocationChanged(Location location) {
-        double latittude = location.getLatitude();
+        double latitude = location.getLatitude();
         double longitude = location.getLongitude();
         if (map != null) {
             map.clear();
-            LatLng nowLat = new LatLng(latittude, longitude);
+            LatLng nowLat = new LatLng(latitude, longitude);
+            CameraPosition cameraPosition = new CameraPosition.Builder()
+                    .target(nowLat).zoom(13).build();
             map.addMarker(new MarkerOptions().position(nowLat).title("Now Location"));
-            map.moveCamera(CameraUpdateFactory.newLatLng(nowLat));
+            map.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
         }
 
         String str = "緯度" + location.getLatitude() + " 經度" + location.getLongitude() + " 標高" + location.getAltitude() + " 方位" + location.getBearing();
