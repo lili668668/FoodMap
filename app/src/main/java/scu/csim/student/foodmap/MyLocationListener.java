@@ -11,6 +11,7 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 /**
@@ -20,6 +21,8 @@ import com.google.android.gms.maps.model.MarkerOptions;
 public class MyLocationListener implements android.location.LocationListener {
     private Context context;
     private GoogleMap map = null;
+    private CameraPosition cameraPosition;
+    private Marker nowMarker;
 
     public MyLocationListener(Context context) {
         this.context = context;
@@ -30,15 +33,27 @@ public class MyLocationListener implements android.location.LocationListener {
         double latitude = location.getLatitude();
         double longitude = location.getLongitude();
         if (map != null) {
-            map.clear();
+
+            if (nowMarker != null) {
+                nowMarker.remove();
+                nowMarker = null;
+            }
+
             LatLng nowLat = new LatLng(latitude, longitude);
-            CameraPosition cameraPosition = new CameraPosition.Builder()
-                    .target(nowLat).zoom(13).build();
-            map.addMarker(new MarkerOptions()
+
+            nowMarker = map.addMarker(new MarkerOptions()
                     .position(nowLat)
                     .title("Now Location")
                     .icon(BitmapDescriptorFactory.fromResource(R.drawable.compass)));
-            map.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+
+            if (cameraPosition == null) {
+                cameraPosition = new CameraPosition.Builder()
+                        .target(nowLat)
+                        .zoom(13)
+                        .build();
+                map.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+            }
+
         }
 
         String str = "緯度" + location.getLatitude() + " 經度" + location.getLongitude() + " 標高" + location.getAltitude() + " 方位" + location.getBearing();

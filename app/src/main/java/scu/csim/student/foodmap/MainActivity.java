@@ -23,6 +23,8 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import ballfish.util.map.Helper;
+
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, OnMapReadyCallback {
 
     // 側邊欄
@@ -134,6 +136,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
         ((MyLocationListener) locationListener).setMap(googleMap);
+
+        LatLng mySchool = Helper.getLatLngByAddress("100台北市中正區貴陽街一段56號");
+
+        mMap.addMarker(new MarkerOptions()
+                .position(mySchool)
+                .title("Soochow University"));
     }
 
     private void openGPS() {
