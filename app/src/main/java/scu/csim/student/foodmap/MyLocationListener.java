@@ -7,6 +7,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
@@ -33,7 +34,10 @@ public class MyLocationListener implements android.location.LocationListener {
             LatLng nowLat = new LatLng(latitude, longitude);
             CameraPosition cameraPosition = new CameraPosition.Builder()
                     .target(nowLat).zoom(13).build();
-            map.addMarker(new MarkerOptions().position(nowLat).title("Now Location"));
+            map.addMarker(new MarkerOptions()
+                    .position(nowLat)
+                    .title("Now Location")
+                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.compass)));
             map.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
         }
 
