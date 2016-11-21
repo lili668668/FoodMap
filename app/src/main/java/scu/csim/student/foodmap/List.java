@@ -2,6 +2,7 @@ package scu.csim.student.foodmap;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -13,20 +14,38 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.SimpleAdapter;
 import android.widget.Toast;
 
+import com.google.android.gms.appindexing.Action;
+import com.google.android.gms.appindexing.AppIndex;
+import com.google.android.gms.appindexing.Thing;
+import com.google.android.gms.common.api.GoogleApiClient;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
 //checklist的列表，上面有店家名稱
-public class List extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener  {
+public class List extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     // 給雅鈴: context 要在onCreate裡面抓喔
     Context context;
     ListView list_view;
     ArrayAdapter<String> adapter;
-    String[] food;
+    private String[] food = {"cat", "flower"};//list 的內容
+    int [] img = {R.drawable.example_picture1,R.drawable.example_picture2};//店家的圖片
+    //String[] food;
 
     // 慈吟：在雅鈴的清單裡加入側邊欄
     private DrawerLayout navLayout;
     private NavigationView navView;
+    private SimpleAdapter simpleAdapter;
+    /**
+     * ATTENTION: This was auto-generated to implement the App Indexing API.
+     * See https://g.co/AppIndexing/AndroidStudio for more information.
+     */
+    private GoogleApiClient client;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,9 +62,20 @@ public class List extends AppCompatActivity implements NavigationView.OnNavigati
 
         list_view = (ListView) findViewById(R.id.list_view);
         list_view.setEmptyView(findViewById(R.id.empty_view));
-        food = getResources().getStringArray(R.array.list_content);
-        adapter = new ArrayAdapter<String>(context,android.R.layout.simple_expandable_list_item_1,food);
-        list_view.setAdapter(adapter);
+        //food = getResources().getStringArray(R.array.list_content);
+        ArrayList<HashMap<String, Object>> items = new ArrayList<HashMap<String, Object>>();
+
+        for (int i = 0; i < food.length ; i++) {
+            HashMap<String, Object> item = new HashMap<String, Object>();
+            item.put("image",img[i]);
+            item.put("text",food[i]);
+            items.add(item);
+
+        }
+
+        simpleAdapter = new SimpleAdapter(this, items, R.layout.item_layout,new String[]{"image", "text"},
+                new int[]{R.id.item_image, R.id.item_text});
+        list_view.setAdapter(simpleAdapter);
         /*list_view.setOnClickListener(new AdapterView.OnItemClickListener() {
 
             //AdapterView.AdapterContextMenuInfo menuInfo = (AdapterView.AdapterContextMenuInfo)item.getMenuInfo();
@@ -56,6 +86,9 @@ public class List extends AppCompatActivity implements NavigationView.OnNavigati
                 Toast.makeText(getApplicationContext(), position , Toast.LENGTH_SHORT).show();
             }
         });*/
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
     }
 
     // 慈吟：在雅鈴的清單裡加入側邊欄
@@ -98,5 +131,41 @@ public class List extends AppCompatActivity implements NavigationView.OnNavigati
         } else {
             super.onBackPressed();
         }
+    }
+
+    /**
+     * ATTENTION: This was auto-generated to implement the App Indexing API.
+     * See https://g.co/AppIndexing/AndroidStudio for more information.
+     */
+    public Action getIndexApiAction() {
+        Thing object = new Thing.Builder()
+                .setName("List Page") // TODO: Define a title for the content shown.
+                // TODO: Make sure this auto-generated URL is correct.
+                .setUrl(Uri.parse("http://[ENTER-YOUR-URL-HERE]"))
+                .build();
+        return new Action.Builder(Action.TYPE_VIEW)
+                .setObject(object)
+                .setActionStatus(Action.STATUS_TYPE_COMPLETED)
+                .build();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        client.connect();
+        AppIndex.AppIndexApi.start(client, getIndexApiAction());
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        AppIndex.AppIndexApi.end(client, getIndexApiAction());
+        client.disconnect();
     }
 }
