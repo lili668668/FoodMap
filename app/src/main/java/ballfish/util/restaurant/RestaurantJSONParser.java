@@ -1,14 +1,10 @@
 package ballfish.util.restaurant;
 
-import com.google.android.gms.maps.model.LatLng;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 
 /**
  * Created by yin on 2016/11/21.
@@ -16,7 +12,6 @@ import java.util.List;
 
 public class RestaurantJSONParser {
 
-    /** 接收一個JSONObject並返回一個列表的列表，包含經緯度 */
     public ArrayList<Restaurant> parse(JSONObject jObject) {
 
         ArrayList<Restaurant> list =
@@ -27,10 +22,14 @@ public class RestaurantJSONParser {
 
             jRestaurants = jObject.getJSONArray("restaurants");
 
-            /** Traversing all routes */
             for (int cnt = 0; cnt < jRestaurants.length(); cnt++) {
                 JSONObject row = (JSONObject) jRestaurants.get(cnt);
                 String name = row.getString("name");
+                String detail = row.getString("detail");
+                String address = row.getString("address");
+
+                Restaurant rest = new Restaurant(name, detail, address);
+                list.add(rest);
             }
 
         } catch (JSONException e) {
@@ -38,6 +37,6 @@ public class RestaurantJSONParser {
         } catch (Exception e) {
         }
 
-        return routes;
+        return list;
     }
 }

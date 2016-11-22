@@ -28,7 +28,11 @@ public class RestaurantAPI {
         return _instance;
     }
 
-    private ArrayList<Restaurant> list = new ArrayList<Restaurant>();
+    protected ArrayList<Restaurant> list = new ArrayList<Restaurant>();
+    public ArrayList<Restaurant> getList() throws IOException {
+        _instance.getAllRestaurantString();
+        return list;
+    }
 
     private String getAllRestaurantString() throws IOException {
         String urlstr = HOST + "all_restaurant";
@@ -85,51 +89,25 @@ public class RestaurantAPI {
     }
     // 解析JSON格式
     private class ParserTask extends
-            AsyncTask<String, Integer, List<List<HashMap<String, String>>>> {
+            AsyncTask<String, Integer, ArrayList<Restaurant>> {
         @Override
-        protected List<List<HashMap<String, String>>> doInBackground(
+        protected ArrayList<Restaurant> doInBackground(
                 String... jsonData) {
             JSONObject jObject;
-            List<List<HashMap<String, String>>> routes = null;
+            ArrayList<Restaurant> list = null;
             try {
                 jObject = new JSONObject(jsonData[0]);
-                DirectionsJSONParser parser = new DirectionsJSONParser();
+                RestaurantJSONParser parser = new RestaurantJSONParser();
                 // 解析JSON資料
-                routes = parser.parse(jObject);
+                list = parser.parse(jObject);
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            return routes;
+            return list;
         }
         @Override
-        protected void onPostExecute(List<List<HashMap<String, String>>> result) {
-            ArrayList<LatLng> points = null;
-            PolylineOptions lineOptions = null;
-            // 走訪所有 result
-            for (int i = 0; i < result.size(); i++) {
-                points = new ArrayList<LatLng>();
-                lineOptions = new PolylineOptions();
-                List<HashMap<String, String>> path = result.get(i);
-                // 得到每一個位置(經緯度)資料
-                for (int j = 0; j < path.size(); j++) {
-                    HashMap<String, String> point = path.get(j);
-                    double lat = Double.parseDouble(point.get("lat"));
-                    double lng = Double.parseDouble(point.get("lng"));
-                    LatLng position = new LatLng(lat, lng);
-                    // 放置折線點經緯度集合
-                    points.add(position);
-                }
-                // 繪製折線點經緯度集合
-                lineOptions.addAll(points);
-                lineOptions.width(lineWidth); // 導航路徑寬度
-                lineOptions.color(lineColor); // 導航路徑顏色
-            }
-            if(lineOptions != null) {
-                map.addPolyline(lineOptions);
-            } else {
-                Toast.makeText(context, mode + "模式下無導航路徑 !",
-                        Toast.LENGTH_SHORT).show();
-            }
+        protected void onPostExecute(ArrayList<Restaurant> result) {
+            list = result;
         }
     }
 }
