@@ -22,9 +22,13 @@ import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.appindexing.Thing;
 import com.google.android.gms.common.api.GoogleApiClient;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+
+import ballfish.util.restaurant.Restaurant;
+import ballfish.util.restaurant.RestaurantAPI;
 
 //checklist的列表，上面有店家名稱
 public class List extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -54,6 +58,20 @@ public class List extends AppCompatActivity implements NavigationView.OnNavigati
 
         // 給雅鈴: context 要在onCreate裡面抓喔
         context = getApplicationContext();
+
+        // 測試用
+        RestaurantAPI api = RestaurantAPI.getInstance();
+        ArrayList<Restaurant> list = new ArrayList<Restaurant>();
+        try {
+            list = api.getList();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        if (list.size() == 0) {
+            Toast.makeText(context, "none", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(context, list.get(0).name, Toast.LENGTH_SHORT).show();
+        }
 
         // 慈吟：在雅鈴的清單裡加入側邊欄
         navLayout = (DrawerLayout) findViewById(R.id.activity_list_with_drawer);

@@ -15,8 +15,13 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.io.IOException;
+import java.util.ArrayList;
+
 import ballfish.util.map.Directions;
 import ballfish.util.map.Helper;
+import ballfish.util.restaurant.Restaurant;
+import ballfish.util.restaurant.RestaurantAPI;
 
 /**
  * GPS實作
@@ -69,7 +74,20 @@ public class MyLocationListener implements android.location.LocationListener {
 
             if (flag) {
                 flag = false;
-                LatLng test = Helper.getLatLngByAddress("100台北市中正區貴陽街一段56號");
+                RestaurantAPI api = RestaurantAPI.getInstance();
+                ArrayList<Restaurant> list = new ArrayList<Restaurant>();
+                try {
+                    list = api.getList();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                LatLng test;
+                if (list.size() == 0) {
+                    test = Helper.getLatLngByAddress("100台北市中正區貴陽街一段56號");
+                } else {
+                    test = Helper.getLatLngByAddress(list.get(0).address);
+                }
+
                 Directions.lineColor = Color.RED;
                 Directions.lineWidth = 10;
                 Directions.getInstance().draw(context, nowLat, test, map, Directions.MODE_TRANSIT);
