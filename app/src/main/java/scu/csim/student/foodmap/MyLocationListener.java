@@ -14,6 +14,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Polyline;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -33,13 +34,14 @@ public class MyLocationListener implements android.location.LocationListener {
     private GoogleMap map = null;
     private CameraPosition cameraPosition;
     private Marker nowMarker;
+    private LatLng needToDraw;
+    private Directions directions;
 
     public MyLocationListener(Context context) {
         this.context = context;
-    }
-
-    public MyLocationListener(Context context, LatLng test) {
-        this.context = context;
+        Directions.lineWidth = 20;
+        Directions.lineColor = Color.RED;
+        directions = Directions.getInstance();
     }
 
     @Override
@@ -67,6 +69,8 @@ public class MyLocationListener implements android.location.LocationListener {
                         .build();
                 map.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
             }
+
+            draw();
         }
 
         String str = "緯度" + latitude + " 經度" + longitude + " 標高" + location.getAltitude() + " 方位" + location.getBearing();
@@ -90,5 +94,16 @@ public class MyLocationListener implements android.location.LocationListener {
 
     public void setMap(GoogleMap map) {
         this.map = map;
+    }
+
+    public void setNeedToDraw(LatLng needToDraw) {
+        this.needToDraw = needToDraw;
+        draw();
+    }
+
+    private void draw() {
+        if (nowMarker != null && needToDraw != null) {
+            directions.draw(context, nowMarker.getPosition(), needToDraw, map, Directions.MODE_WALKING);
+        }
     }
 }

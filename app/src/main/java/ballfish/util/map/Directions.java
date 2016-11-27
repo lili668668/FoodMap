@@ -24,6 +24,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 
 public class Directions {
@@ -38,6 +39,8 @@ public class Directions {
 
     public static int lineWidth = 5;
     public static int lineColor = Color.BLUE;
+
+    private Polyline directionPolyline;
 
     private Directions() {}
     private static Directions _instance = new Directions();
@@ -177,7 +180,11 @@ public class Directions {
                 lineOptions.color(lineColor); // 導航路徑顏色
             }
             if(lineOptions != null) {
-                map.addPolyline(lineOptions);
+                if (directionPolyline != null) {
+                    directionPolyline.remove();
+                }
+
+                directionPolyline = map.addPolyline(lineOptions);
             } else {
                 Toast.makeText(context, mode + "模式下無導航路徑 !",
                         Toast.LENGTH_SHORT).show();

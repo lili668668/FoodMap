@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.provider.Settings;
@@ -22,11 +23,13 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.io.IOException;
 import java.util.ArrayList;
 
+import ballfish.util.map.Directions;
 import ballfish.util.map.Helper;
 import ballfish.util.restaurant.AfterGetListExecute;
 import ballfish.util.restaurant.Restaurant;
@@ -76,7 +79,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onResume() {
         if (locationManager == null) {
             locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-            locationListener = new MyLocationListener(context, mySchool);
+            locationListener = new MyLocationListener(context);
         }
 
         updateGPS();
@@ -161,13 +164,23 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     Toast.makeText(context, "收不到資料", Toast.LENGTH_SHORT).show();test = Helper.getLatLngByAddress("100台北市中正區貴陽街一段56號");
                 } else {
                     for (int cnt = 0;cnt < list.size();cnt++) {
-                        test = Helper.getLatLngByAddress(list.get(cnt).address);
+                        Restaurant rest = list.get(cnt);
+                        test = Helper.getLatLngByAddress(rest.address);
                         if (test == null) {
-                            System.out.println(list.get(cnt).name + " is null");
+                            System.out.println(rest.name + " is null");
                         } else {
                             mMap.addMarker(new MarkerOptions()
                                     .position(test)
-                                    .title(list.get(cnt).name));
+                                    .title(rest.name)
+                                    .snippet(rest.detail));
+                            mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+                                @Override
+                                public boolean onMarkerClick(Marker marker) {
+                                    ((MyLocationListener) locationListener).setNeedToDraw(marker.getPosition());
+                                    marker.showInfoWindow();
+                                    return true;
+                                }
+                            });
                         }
                     }
                 }
