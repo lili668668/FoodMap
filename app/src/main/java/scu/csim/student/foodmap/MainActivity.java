@@ -51,7 +51,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private android.location.LocationListener locationListener;
     private LocationManager locationManager;
     private static final int REQUEST_GPS = 492;
-    private LatLng mySchool;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,8 +66,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         locationListener = new MyLocationListener(context);
         openGPS();
-
-        mySchool = Helper.getLatLngByAddress("100台北市中正區貴陽街一段56號");
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
@@ -149,10 +146,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
         ((MyLocationListener) locationListener).setMap(googleMap);
-
-        mMap.addMarker(new MarkerOptions()
-                .position(mySchool)
-                .title("Soochow University"));
 
         RestaurantAPI api = RestaurantAPI.getInstance();
         try {

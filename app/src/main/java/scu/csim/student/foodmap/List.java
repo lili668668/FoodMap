@@ -46,6 +46,9 @@ public class List extends AppCompatActivity implements NavigationView.OnNavigati
     private DrawerLayout navLayout;
     private NavigationView navView;
     private SimpleAdapter simpleAdapter;
+
+    private ArrayList<Restaurant> restaurantList;
+
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
      * See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -86,27 +89,22 @@ public class List extends AppCompatActivity implements NavigationView.OnNavigati
                             new int[]{R.id.name_text, R.id.detail_text});
                     list_view.setAdapter(simpleAdapter);
                     simpleAdapter.notifyDataSetChanged();
+
+                    restaurantList = list;
                 }
             });
         } catch (IOException e) {
-            list_view = (ListView) findViewById(R.id.list_view);
-            list_view.setEmptyView(findViewById(R.id.empty_view));
-            ArrayList<HashMap<String, Object>> items = new ArrayList<HashMap<String, Object>>();
-
-            for (int i = 0; i < names.length ; i++) {
-                HashMap<String, Object> item = new HashMap<String, Object>();
-                item.put("name",names[i]);
-                item.put("detail",detail[i]);
-                items.add(item);
-            }
-            simpleAdapter = new SimpleAdapter(context, items, R.layout.item_layout,new String[]{"name", "detail"},
-                    new int[]{R.id.name_text, R.id.detail_text});
-            list_view.setAdapter(simpleAdapter);
-            simpleAdapter.notifyDataSetChanged();
-
             e.printStackTrace();
         }
 
+        list_view.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if (restaurantList != null) {
+                    Restaurant rest = restaurantList.get(position);
+                }
+            }
+        });
 
         /*list_view.setOnClickListener(new AdapterView.OnItemClickListener() {
 
