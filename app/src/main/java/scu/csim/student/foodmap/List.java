@@ -38,8 +38,8 @@ public class List extends AppCompatActivity implements NavigationView.OnNavigati
     Context context;
     ListView list_view;
     ArrayAdapter<String> adapter;
-    private String[] food = {"cat", "flower"};//list 的內容
-    int [] img = {R.drawable.example_picture1,R.drawable.example_picture2};//店家的圖片
+    private String[] names = {"cat", "flower"};//list 的內容
+    private String [] detail = {"測試一", "測試二"};//店家的圖片
     //String[] food;
 
     // 慈吟：在雅鈴的清單裡加入側邊欄
@@ -60,44 +60,54 @@ public class List extends AppCompatActivity implements NavigationView.OnNavigati
         // 給雅鈴: context 要在onCreate裡面抓喔
         context = getApplicationContext();
 
-        // 測試用
-        RestaurantAPI api = RestaurantAPI.getInstance();
-        try {
-            api.getList(new AfterGetListExecute() {
-                @Override
-                public void execute(ArrayList<Restaurant> list) {
-                    if (list == null || list.size() == 0) {
-                        Toast.makeText(context, "none", Toast.LENGTH_SHORT).show();
-                    } else {
-                        Toast.makeText(context, list.get(0).name, Toast.LENGTH_SHORT).show();
-                    }
-                }
-            });
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
         // 慈吟：在雅鈴的清單裡加入側邊欄
         navLayout = (DrawerLayout) findViewById(R.id.activity_list_with_drawer);
         navView = (NavigationView) findViewById(R.id.nav_list_view);
         navView.setNavigationItemSelectedListener(this);
 
-        list_view = (ListView) findViewById(R.id.list_view);
-        list_view.setEmptyView(findViewById(R.id.empty_view));
-        //food = getResources().getStringArray(R.array.list_content);
-        ArrayList<HashMap<String, Object>> items = new ArrayList<HashMap<String, Object>>();
+        // 取得店家資料
+        RestaurantAPI api = RestaurantAPI.getInstance();
+        try {
+            api.getList(new AfterGetListExecute() {
+                @Override
+                public void execute(ArrayList<Restaurant> list) {
+                    list_view = (ListView) findViewById(R.id.list_view);
+                    list_view.setEmptyView(findViewById(R.id.empty_view));
+                    ArrayList<HashMap<String, Object>> items = new ArrayList<HashMap<String, Object>>();
 
-        for (int i = 0; i < food.length ; i++) {
-            HashMap<String, Object> item = new HashMap<String, Object>();
-            item.put("image",img[i]);
-            item.put("text",food[i]);
-            items.add(item);
+                    for (int cnt = 0; cnt < list.size() ; cnt++) {
+                        Restaurant rest = list.get(cnt);
+                        HashMap<String, Object> item = new HashMap<String, Object>();
+                        item.put("name",rest.name);
+                        item.put("detail",rest.detail);
+                        items.add(item);
+                    }
+                    simpleAdapter = new SimpleAdapter(context, items, R.layout.item_layout,new String[]{"name", "detail"},
+                            new int[]{R.id.name_text, R.id.detail_text});
+                    list_view.setAdapter(simpleAdapter);
+                    simpleAdapter.notifyDataSetChanged();
+                }
+            });
+        } catch (IOException e) {
+            list_view = (ListView) findViewById(R.id.list_view);
+            list_view.setEmptyView(findViewById(R.id.empty_view));
+            ArrayList<HashMap<String, Object>> items = new ArrayList<HashMap<String, Object>>();
 
+            for (int i = 0; i < names.length ; i++) {
+                HashMap<String, Object> item = new HashMap<String, Object>();
+                item.put("name",names[i]);
+                item.put("detail",detail[i]);
+                items.add(item);
+            }
+            simpleAdapter = new SimpleAdapter(context, items, R.layout.item_layout,new String[]{"name", "detail"},
+                    new int[]{R.id.name_text, R.id.detail_text});
+            list_view.setAdapter(simpleAdapter);
+            simpleAdapter.notifyDataSetChanged();
+
+            e.printStackTrace();
         }
 
-        simpleAdapter = new SimpleAdapter(this, items, R.layout.item_layout,new String[]{"image", "text"},
-                new int[]{R.id.item_image, R.id.item_text});
-        list_view.setAdapter(simpleAdapter);
+
         /*list_view.setOnClickListener(new AdapterView.OnItemClickListener() {
 
             //AdapterView.AdapterContextMenuInfo menuInfo = (AdapterView.AdapterContextMenuInfo)item.getMenuInfo();
