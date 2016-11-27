@@ -20,7 +20,7 @@ public class RestaurantJSONParser {
 
         try {
 
-            jRestaurants = jObject.getJSONArray("restaurants");
+            jRestaurants = jObject.getJSONArray("restaurant");
 
             for (int cnt = 0; cnt < jRestaurants.length(); cnt++) {
                 JSONObject row = (JSONObject) jRestaurants.get(cnt);

@@ -27,15 +27,17 @@ public class RestaurantAPI {
     public static RestaurantAPI getInstance() {
         return _instance;
     }
+    public AfterGetListExecute execute;
 
-    protected ArrayList<Restaurant> list = new ArrayList<Restaurant>();
-    public ArrayList<Restaurant> getList() throws IOException {
-        _instance.getAllRestaurantString();
-        return list;
+    public void getList(AfterGetListExecute execute) throws IOException {
+        this.execute = execute;
+        DownloadTask downloadTask = new DownloadTask();
+        downloadTask.execute();
     }
 
     private String getAllRestaurantString() throws IOException {
         String urlstr = HOST + "all_restaurant";
+        System.out.println(urlstr);
         String data = "";
         InputStream inputStream = null;
         HttpURLConnection httpURLConnection = null;
@@ -61,6 +63,8 @@ public class RestaurantAPI {
                 httpURLConnection.disconnect();
             }
         }
+
+        System.out.println(data);
 
         return data;
     }
@@ -107,7 +111,8 @@ public class RestaurantAPI {
         }
         @Override
         protected void onPostExecute(ArrayList<Restaurant> result) {
-            list = result;
+            super.onPostExecute(result);
+            execute.execute(result);
         }
     }
 }

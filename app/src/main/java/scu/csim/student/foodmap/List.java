@@ -27,6 +27,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import ballfish.util.restaurant.AfterGetListExecute;
 import ballfish.util.restaurant.Restaurant;
 import ballfish.util.restaurant.RestaurantAPI;
 
@@ -61,16 +62,19 @@ public class List extends AppCompatActivity implements NavigationView.OnNavigati
 
         // 測試用
         RestaurantAPI api = RestaurantAPI.getInstance();
-        ArrayList<Restaurant> list = new ArrayList<Restaurant>();
         try {
-            list = api.getList();
+            api.getList(new AfterGetListExecute() {
+                @Override
+                public void execute(ArrayList<Restaurant> list) {
+                    if (list == null || list.size() == 0) {
+                        Toast.makeText(context, "none", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(context, list.get(0).name, Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
         } catch (IOException e) {
             e.printStackTrace();
-        }
-        if (list.size() == 0) {
-            Toast.makeText(context, "none", Toast.LENGTH_SHORT).show();
-        } else {
-            Toast.makeText(context, list.get(0).name, Toast.LENGTH_SHORT).show();
         }
 
         // 慈吟：在雅鈴的清單裡加入側邊欄
