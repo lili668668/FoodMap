@@ -34,17 +34,12 @@ public class MyLocationListener implements android.location.LocationListener {
     private CameraPosition cameraPosition;
     private Marker nowMarker;
 
-    private LatLng mySchool;
-
-    private boolean flag = true;
-
     public MyLocationListener(Context context) {
         this.context = context;
     }
 
     public MyLocationListener(Context context, LatLng test) {
         this.context = context;
-        mySchool = test;
     }
 
     @Override
@@ -71,38 +66,6 @@ public class MyLocationListener implements android.location.LocationListener {
                         .zoom(13)
                         .build();
                 map.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-            }
-
-            if (flag) {
-                flag = false;
-                RestaurantAPI api = RestaurantAPI.getInstance();
-                try {
-                    api.getList(new AfterGetListExecute() {
-                        @Override
-                        public void execute(ArrayList<Restaurant> list) {
-                            LatLng test;
-                            if (list == null || list.size() == 0) {
-                                Toast.makeText(context, "Fail", Toast.LENGTH_SHORT).show();
-                                test = Helper.getLatLngByAddress("100台北市中正區貴陽街一段56號");
-                            } else {
-                                test = Helper.getLatLngByAddress(list.get(1).address);
-                            }
-
-                            Directions.lineColor = Color.RED;
-                            Directions.lineWidth = 10;
-                            if (nowLat == null) {
-                                System.out.println("nowLat is null");
-                            } else if (test == null) {
-                                System.out.println("test address is null");
-                            } else {
-                                Directions.getInstance().draw(context, nowLat, test, map, Directions.MODE_TRANSIT);
-                            }
-
-                        }
-                    });
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
             }
         }
 

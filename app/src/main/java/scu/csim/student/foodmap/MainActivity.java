@@ -14,6 +14,7 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -23,7 +24,13 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.io.IOException;
+import java.util.ArrayList;
+
 import ballfish.util.map.Helper;
+import ballfish.util.restaurant.AfterGetListExecute;
+import ballfish.util.restaurant.Restaurant;
+import ballfish.util.restaurant.RestaurantAPI;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, OnMapReadyCallback {
 
@@ -143,6 +150,33 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mMap.addMarker(new MarkerOptions()
                 .position(mySchool)
                 .title("Soochow University"));
+
+        RestaurantAPI api = RestaurantAPI.getInstance();
+        try {
+            api.getList(new AfterGetListExecute() {
+                @Override
+                public void execute(ArrayList<Restaurant> list) {
+                LatLng test;
+                if (list == null || list.size() == 0) {
+                    Toast.makeText(context, "收不到資料", Toast.LENGTH_SHORT).show();test = Helper.getLatLngByAddress("100台北市中正區貴陽街一段56號");
+                } else {
+                    for (int cnt = 0;cnt < list.size();cnt++) {
+                        test = Helper.getLatLngByAddress(list.get(cnt).address);
+                        if (test == null) {
+                            System.out.println(list.get(cnt).name + " is null");
+                        } else {
+                            mMap.addMarker(new MarkerOptions()
+                                    .position(test)
+                                    .title(list.get(cnt).name));
+                        }
+                    }
+                }
+
+                }
+            });
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void openGPS() {

@@ -28,11 +28,16 @@ public class RestaurantAPI {
         return _instance;
     }
     public AfterGetListExecute execute;
+    private ArrayList<Restaurant> reList = null;
 
     public void getList(AfterGetListExecute execute) throws IOException {
         this.execute = execute;
-        DownloadTask downloadTask = new DownloadTask();
-        downloadTask.execute();
+        if (reList == null) {
+            DownloadTask downloadTask = new DownloadTask();
+            downloadTask.execute();
+        } else {
+            this.execute.execute(reList);
+        }
     }
 
     private String getAllRestaurantString() throws IOException {
@@ -112,6 +117,7 @@ public class RestaurantAPI {
         @Override
         protected void onPostExecute(ArrayList<Restaurant> result) {
             super.onPostExecute(result);
+            reList = result;
             execute.execute(result);
         }
     }
