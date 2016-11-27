@@ -85,7 +85,7 @@ public class MyLocationListener implements android.location.LocationListener {
                                 Toast.makeText(context, "Fail", Toast.LENGTH_SHORT).show();
                                 test = Helper.getLatLngByAddress("100台北市中正區貴陽街一段56號");
                             } else {
-                                test = Helper.getLatLngByAddress(list.get(0).address);
+                                test = Helper.getLatLngByAddress(list.get(1).address);
                             }
 
                             Directions.lineColor = Color.RED;
