@@ -34,7 +34,7 @@ public class List extends AppCompatActivity implements NavigationView.OnNavigati
     ListView list_view;
     ArrayAdapter<String> adapter;
     private String[] food = {"cat", "flower"};//list 的內容
-    int [] img = {R.drawable.example_picture1,R.drawable.example_picture2};//店家的圖片
+    long [] img = {R.drawable.example_picture1,R.drawable.example_picture2};//店家的圖片
     //String[] food;
 
     // 慈吟：在雅鈴的清單裡加入側邊欄
