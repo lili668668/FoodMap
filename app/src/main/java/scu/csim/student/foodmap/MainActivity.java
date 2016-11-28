@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.provider.Settings;
@@ -14,13 +15,25 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+
+import java.io.IOException;
+import java.util.ArrayList;
+
+import ballfish.util.map.Directions;
+import ballfish.util.map.Helper;
+import ballfish.util.restaurant.AfterGetListExecute;
+import ballfish.util.restaurant.Restaurant;
+import ballfish.util.restaurant.RestaurantAPI;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, OnMapReadyCallback {
 
@@ -132,11 +145,44 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
+        ((MyLocationListener) locationListener).setMap(googleMap);
 
-        // Add a marker in Sydney and move the camera
-        LatLng sydney = new LatLng(-34, 151);
-        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+        RestaurantAPI api = RestaurantAPI.getInstance();
+        try {
+            api.getList(new AfterGetListExecute() {
+                @Override
+                public void execute(ArrayList<Restaurant> list) {
+                LatLng test;
+                if (list == null || list.size() == 0) {
+                    Toast.makeText(context, "收不到資料", Toast.LENGTH_SHORT).show();test = Helper.getLatLngByAddress("100台北市中正區貴陽街一段56號");
+                } else {
+                    for (int cnt = 0;cnt < list.size();cnt++) {
+                        Restaurant rest = list.get(cnt);
+                        test = Helper.getLatLngByAddress(rest.address);
+                        if (test == null) {
+                            System.out.println(rest.name + " is null");
+                        } else {
+                            mMap.addMarker(new MarkerOptions()
+                                    .position(test)
+                                    .title(rest.name)
+                                    .snippet(rest.detail));
+                            mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+                                @Override
+                                public boolean onMarkerClick(Marker marker) {
+                                    ((MyLocationListener) locationListener).setNeedToDraw(marker.getPosition());
+                                    marker.showInfoWindow();
+                                    return true;
+                                }
+                            });
+                        }
+                    }
+                }
+
+                }
+            });
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void openGPS() {

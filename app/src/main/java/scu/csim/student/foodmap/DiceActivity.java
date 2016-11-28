@@ -6,10 +6,10 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
-import android.graphics.drawable.RippleDrawable;
 import android.content.Context;
 import android.content.Intent;
 import android.hardware.Sensor;
@@ -20,15 +20,16 @@ import android.widget.TextView;
 
 import com.google.android.gms.maps.OnMapReadyCallback;
 
-public class DiceActivity extends AppCompatActivity  implements NavigationView.OnNavigationItemSelectedListener{
+public class DiceActivity extends AppCompatActivity  implements NavigationView.OnNavigationItemSelectedListener, Button.OnClickListener{
 
     // 側邊欄
     private DrawerLayout navLayout;
     private NavigationView navView;
     private Context context;
 
-    private ImageView one;  //表示抽起來的籤(抽到時上移,再想想)
     private TextView rest;  //表示抽到的餐廳名
+    private ImageView potLeft;
+    private Button again;
     //Intent intent = new Intent();
 
     private SensorManager mSensorManager;   //體感(Sensor)使用管理
@@ -43,15 +44,18 @@ public class DiceActivity extends AppCompatActivity  implements NavigationView.O
     private static final int SPEED_SHRESHOLD = 3000;
 
     //觸發間隔時間
-    private static final int UPTATE_INTERVAL_TIME = 70;
+    private static final int UPTATE_INTERVAL_TIME = 100;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dice_with_drawer);
 
-        one = (ImageView) findViewById(R.id.one);
         rest = (TextView) findViewById(R.id.rest);
+        potLeft = (ImageView) findViewById(R.id.potLeft);
+        again = (Button) findViewById(R.id.again);
+        again.setOnClickListener(this);
+
 
         // 側邊欄
         navLayout = (DrawerLayout) findViewById(R.id.activity_dice_with_drawer);
@@ -107,14 +111,10 @@ public class DiceActivity extends AppCompatActivity  implements NavigationView.O
             if (mSpeed >= SPEED_SHRESHOLD)
             {
                 //達到搖一搖甩動後要做的事情
-                one.layout(one.getLeft(), one.getTop()-10, one.getRight(), one.getBottom());
                 RandomNumber();  //隨機抽數字(暫時)
+                potLeft.setImageDrawable(getResources().getDrawable( R.drawable.pot_right ));
 
                 //Log.d("TAG","搖一搖中...");
-
-                //跳到下一頁(先做不跳頁的)
-                //intent.setClass(DiceActivity.this , ResultActivity.class);
-                //startActivity(intent);
             }
         }
 
@@ -123,22 +123,35 @@ public class DiceActivity extends AppCompatActivity  implements NavigationView.O
         }
     };
 
+    //點擊後
+    public void onClick(View v) {
+        //圖片恢復抽籤前
+        potLeft.setImageDrawable(getResources().getDrawable( R.drawable.pot_left ));
+        rest.setText("再次等待抽籤");
+
+    }
+
     private void RandomNumber(){
         //隨機10個數字
         int r = (int)(Math.random()*10 + 1);
-
-        // 慈吟：型態不對，他Crash了
-        // r是int不是string
         rest.setText(r + "");
     }
 
     @Override
-    protected void onDestroy()
+    protected void onStop()
     {
-        super.onDestroy();
+        super.onStop();
         //在程式關閉時移除體感(Sensor)觸發
         mSensorManager.unregisterListener(SensorListener);
     }
+
+    @Override
+    protected void onRestart()
+    {
+        super.onRestart();
+        //mSensorManager.registerListener(SensorListener,mSensor,SensorManager.SENSOR_DELAY_GAME);
+    }
+
 
     // 慈吟：在詩堯的清單裡加入側邊欄
     @SuppressWarnings("StatementWithEmptyBody")

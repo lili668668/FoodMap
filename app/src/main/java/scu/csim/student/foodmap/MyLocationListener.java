@@ -1,24 +1,79 @@
 package scu.csim.student.foodmap;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
 import android.widget.Toast;
+
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.CameraPosition;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Polyline;
+
+import java.io.IOException;
+import java.util.ArrayList;
+
+import ballfish.util.map.Directions;
+import ballfish.util.map.Helper;
+import ballfish.util.restaurant.AfterGetListExecute;
+import ballfish.util.restaurant.Restaurant;
+import ballfish.util.restaurant.RestaurantAPI;
 
 /**
  * GPS實作
  */
 
 public class MyLocationListener implements android.location.LocationListener {
-    Context context;
+    private Context context;
+    private GoogleMap map = null;
+    private CameraPosition cameraPosition;
+    private Marker nowMarker;
+    private LatLng needToDraw;
+    private Directions directions;
 
     public MyLocationListener(Context context) {
         this.context = context;
+        Directions.lineWidth = 20;
+        Directions.lineColor = Color.RED;
+        directions = Directions.getInstance();
     }
 
     @Override
     public void onLocationChanged(Location location) {
-        String str = "緯度" + location.getLatitude() + " 經度" + location.getLongitude() + " 標高" + location.getAltitude() + " 方位" + location.getBearing();
+        double latitude = location.getLatitude();
+        double longitude = location.getLongitude();
+        if (map != null) {
+
+            if (nowMarker != null) {
+                nowMarker.remove();
+                nowMarker = null;
+            }
+
+            final LatLng nowLat = new LatLng(latitude, longitude);
+
+            nowMarker = map.addMarker(new MarkerOptions()
+                    .position(nowLat)
+                    .title("Now Location")
+                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.compass)));
+
+            if (cameraPosition == null) {
+                cameraPosition = new CameraPosition.Builder()
+                        .target(nowLat)
+                        .zoom(13)
+                        .build();
+                map.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+            }
+
+            draw();
+        }
+
+        String str = "緯度" + latitude + " 經度" + longitude + " 標高" + location.getAltitude() + " 方位" + location.getBearing();
         Toast.makeText(context, str, Toast.LENGTH_SHORT).show();
     }
 
@@ -35,5 +90,20 @@ public class MyLocationListener implements android.location.LocationListener {
     @Override
     public void onProviderDisabled(String provider) {
 
+    }
+
+    public void setMap(GoogleMap map) {
+        this.map = map;
+    }
+
+    public void setNeedToDraw(LatLng needToDraw) {
+        this.needToDraw = needToDraw;
+        draw();
+    }
+
+    private void draw() {
+        if (nowMarker != null && needToDraw != null) {
+            directions.draw(context, nowMarker.getPosition(), needToDraw, map, Directions.MODE_WALKING);
+        }
     }
 }

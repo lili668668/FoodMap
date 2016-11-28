@@ -11,51 +11,25 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="scu.csim.student.foodmap.DiceActivity">
 
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:srcCompat="@drawable/name"
-        android:id="@+id/name"
-        android:layout_marginTop="170dp"
-        android:layout_marginLeft="27dp"
-        android:layout_marginStart="27dp"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignTop="@+id/one"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginRight="34dp"
-        android:layout_marginEnd="34dp" />
-
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:srcCompat="@drawable/one"
-        android:id="@+id/one"
-        android:layout_marginTop="91dp"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true" />
-
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="214dp"
-        app:srcCompat="@drawable/sticks"
-        android:id="@+id/sticks"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="175dp" />
-
     <TextView
-        android:text="搖動手機抽籤！"
+        android:text="今天吃什麼？搖動手機抽籤！"
+        android:textColor="@color/colorTextShake"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:id="@+id/shake"
+        android:textSize="27sp"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginLeft="15dp"
-        android:layout_marginStart="15dp"
-        android:layout_marginTop="22dp"
-        android:id="@+id/shake"
-        android:textSize="36sp" />
+        android:layout_alignParentStart="true" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:srcCompat="@drawable/brown"
+        android:id="@+id/restBKG"
+        android:layout_above="@+id/again"
+        android:layout_alignRight="@+id/again"
+        android:layout_alignEnd="@+id/again" />
 
     <TextView
         android:text="等待抽籤"
@@ -63,8 +37,34 @@
         android:layout_height="wrap_content"
         android:id="@+id/rest"
         android:textSize="50sp"
-        android:layout_below="@+id/one"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="59dp" />
+        android:layout_above="@+id/again"
+        android:layout_alignLeft="@+id/restBKG"
+        android:layout_alignStart="@+id/restBKG"
+        android:layout_marginLeft="25dp"
+        android:layout_marginStart="25dp"
+        android:layout_marginBottom="14dp" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:srcCompat="@drawable/pot_left"
+        android:id="@+id/potLeft"
+        android:layout_alignBottom="@+id/rest"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginLeft="10dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginBottom="24dp" />
+
+    <Button
+        android:text="再抽一次"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/again"
+        android:layout_marginRight="38dp"
+        android:layout_marginEnd="38dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
 
 </RelativeLayout>
