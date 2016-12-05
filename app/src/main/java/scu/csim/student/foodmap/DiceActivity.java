@@ -16,9 +16,19 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.widget.ListView;
+import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
 import com.google.android.gms.maps.OnMapReadyCallback;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+
+import ballfish.util.restaurant.AfterGetListExecute;
+import ballfish.util.restaurant.Restaurant;
+import ballfish.util.restaurant.RestaurantAPI;
 
 public class DiceActivity extends AppCompatActivity  implements NavigationView.OnNavigationItemSelectedListener, Button.OnClickListener{
 
@@ -40,11 +50,13 @@ public class DiceActivity extends AppCompatActivity  implements NavigationView.O
     private double mSpeed;                 //甩動力道數度
     private long mLastUpdateTime;           //觸發時間
 
+    boolean shake = false;  //新增用來固定抽籤結果
+
     //甩動力道數度設定值
     private static final int SPEED_SHRESHOLD = 3000;
 
-    //觸發間隔時間
-    private static final int UPTATE_INTERVAL_TIME = 100;
+    //觸發間隔時間 修正後加長
+    private static final int UPTATE_INTERVAL_TIME = 200;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,7 +67,6 @@ public class DiceActivity extends AppCompatActivity  implements NavigationView.O
         potLeft = (ImageView) findViewById(R.id.potLeft);
         again = (Button) findViewById(R.id.again);
         again.setOnClickListener(this);
-
 
         // 側邊欄
         navLayout = (DrawerLayout) findViewById(R.id.activity_dice_with_drawer);
@@ -85,7 +96,7 @@ public class DiceActivity extends AppCompatActivity  implements NavigationView.O
             //觸發間隔時間 = 當前觸發時間 - 上次觸發時間
             long mTimeInterval = mCurrentUpdateTime - mLastUpdateTime;
 
-            //若觸發間隔時間< 70 則return;
+            //若觸發間隔時間< 觸發間隔 則return;
             if (mTimeInterval < UPTATE_INTERVAL_TIME) return;
 
             mLastUpdateTime = mCurrentUpdateTime;
@@ -107,14 +118,15 @@ public class DiceActivity extends AppCompatActivity  implements NavigationView.O
             //體感(Sensor)甩動力道速度公式
             mSpeed = Math.sqrt(mDeltaX * mDeltaX + mDeltaY * mDeltaY + mDeltaZ * mDeltaZ)/ mTimeInterval * 10000;
 
+
             //若體感(Sensor)甩動速度大於等於甩動設定值則進入 (達到甩動力道及速度)
-            if (mSpeed >= SPEED_SHRESHOLD)
+            if (mSpeed >= SPEED_SHRESHOLD & shake == false)
             {
                 //達到搖一搖甩動後要做的事情
-                RandomNumber();  //隨機抽數字(暫時)
+                RandomRest();  //隨機抽餐廳
                 potLeft.setImageDrawable(getResources().getDrawable( R.drawable.pot_right ));
+                shake = true;
 
-                //Log.d("TAG","搖一搖中...");
             }
         }
 
@@ -128,13 +140,25 @@ public class DiceActivity extends AppCompatActivity  implements NavigationView.O
         //圖片恢復抽籤前
         potLeft.setImageDrawable(getResources().getDrawable( R.drawable.pot_left ));
         rest.setText("再次等待抽籤");
+        shake = false;
 
     }
 
-    private void RandomNumber(){
-        //隨機10個數字
-        int r = (int)(Math.random()*10 + 1);
-        rest.setText(r + "");
+    private void RandomRest(){
+        // 取得店家資料
+        RestaurantAPI api = RestaurantAPI.getInstance();
+        try {
+            api.getList(new AfterGetListExecute() {      //在取得清單後執行
+                @Override
+                public void execute(ArrayList<Restaurant> list) {
+                    //隨機抽餐廳名稱
+                    int r = (int)(Math.random()*list.size());
+                    rest.setText(list.get(r).name + "");
+                }
+            });
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

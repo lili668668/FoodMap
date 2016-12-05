@@ -31,19 +31,6 @@
         android:layout_alignRight="@+id/again"
         android:layout_alignEnd="@+id/again" />
 
-    <TextView
-        android:text="等待抽籤"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/rest"
-        android:textSize="50sp"
-        android:layout_above="@+id/again"
-        android:layout_alignLeft="@+id/restBKG"
-        android:layout_alignStart="@+id/restBKG"
-        android:layout_marginLeft="25dp"
-        android:layout_marginStart="25dp"
-        android:layout_marginBottom="14dp" />
-
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -66,5 +53,16 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />
+
+    <TextView
+        android:text="等待抽籤"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/rest"
+        android:textSize="35sp"
+        android:layout_marginBottom="25dp"
+        android:layout_alignBottom="@+id/restBKG"
+        android:layout_toLeftOf="@+id/again"
+        android:layout_toStartOf="@+id/again" />
 
 </RelativeLayout>
