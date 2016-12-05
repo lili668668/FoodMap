@@ -97,25 +97,33 @@ public class List extends AppCompatActivity implements NavigationView.OnNavigati
             e.printStackTrace();
         }
 
+        context = this;
         list_view.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if (restaurantList != null) {
                     Restaurant rest = restaurantList.get(position);
+
+                    Intent intent = new Intent(context,ListContentActivity.class);
+                    Bundle rest_data = new Bundle();
+
+                    //get value
+                    String rest_name = rest.name;
+                    String rest_address = rest.address;
+                    String rest_detail = rest.detail;
+
+                    //package it
+                    rest_data.putString("name",rest_name);
+                    rest_data.putString("address",rest_address);
+                    rest_data.putString("detail",rest_detail);
+
+                    //send
+                    intent.putExtras(rest_data);
+                    startActivity(intent);
                 }
             }
         });
 
-        /*list_view.setOnClickListener(new AdapterView.OnItemClickListener() {
-
-            //AdapterView.AdapterContextMenuInfo menuInfo = (AdapterView.AdapterContextMenuInfo)item.getMenuInfo();
-            //int position = menuInfo.position;
-
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Toast.makeText(getApplicationContext(), position , Toast.LENGTH_SHORT).show();
-            }
-        });*/
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
         client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
