@@ -63,6 +63,9 @@ public class List extends AppCompatActivity implements NavigationView.OnNavigati
         // 給雅鈴: context 要在onCreate裡面抓喔
         context = getApplicationContext();
 
+        list_view = (ListView) findViewById(R.id.list_view);
+        list_view.setEmptyView(findViewById(R.id.empty_view));
+
         // 慈吟：在雅鈴的清單裡加入側邊欄
         navLayout = (DrawerLayout) findViewById(R.id.activity_list_with_drawer);
         navView = (NavigationView) findViewById(R.id.nav_list_view);
@@ -74,8 +77,6 @@ public class List extends AppCompatActivity implements NavigationView.OnNavigati
             api.getList(new AfterGetListExecute() {
                 @Override
                 public void execute(ArrayList<Restaurant> list) {
-                    list_view = (ListView) findViewById(R.id.list_view);
-                    list_view.setEmptyView(findViewById(R.id.empty_view));
                     ArrayList<HashMap<String, Object>> items = new ArrayList<HashMap<String, Object>>();
 
                     for (int cnt = 0; cnt < list.size() ; cnt++) {
