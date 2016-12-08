@@ -109,11 +109,13 @@ public class List extends AppCompatActivity implements NavigationView.OnNavigati
                     Bundle rest_data = new Bundle();
 
                     //get value
+                    String rest_photos = rest.photos; // 取得很多圖片的檔名
                     String rest_name = rest.name;
                     String rest_address = rest.address;
                     String rest_detail = rest.detail;
 
                     //package it
+                    rest_data.putString("photos", rest_photos); // 將圖片檔名傳過去
                     rest_data.putString("name",rest_name);
                     rest_data.putString("address",rest_address);
                     rest_data.putString("detail",rest_detail);

@@ -56,7 +56,7 @@ public class DiceActivity extends AppCompatActivity  implements NavigationView.O
     private static final int SPEED_SHRESHOLD = 3000;
 
     //觸發間隔時間 修正後加長
-    private static final int UPTATE_INTERVAL_TIME = 200;
+    private static final int UPTATE_INTERVAL_TIME = 100;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

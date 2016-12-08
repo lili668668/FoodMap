@@ -20,7 +20,8 @@ import java.util.HashMap;
 import java.util.List;
 
 public class RestaurantAPI {
-    private static final String HOST = "http://foodmap-nethw.rhcloud.com/";
+    public static final String HOST = "http://foodmap-nethw.rhcloud.com/";
+    public static final String PHOTO_DIR = "photo/";
 
     private RestaurantAPI() {}
     private static RestaurantAPI _instance = new RestaurantAPI();
