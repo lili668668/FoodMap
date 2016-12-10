@@ -28,8 +28,9 @@ public class RestaurantJSONParser {
                 String detail = row.getString("detail");
                 String address = row.getString("address");
                 String photos = row.getString("photos");
+                String _class = row.getString("class");
 
-                Restaurant rest = new Restaurant(name, detail, address, photos);
+                Restaurant rest = new Restaurant(name, detail, address, photos, _class);
                 list.add(rest);
             }
 
