@@ -16,8 +16,8 @@ import ballfish.util.map.Directions;
  * Created by yin on 2016/12/10.
  */
 
-public class Set_Card {
-    private Set_Card() {}
+public class SetCard {
+    private SetCard() {}
 
     private static SharedPreferences sp;
     private static SharedPreferences.Editor editor;

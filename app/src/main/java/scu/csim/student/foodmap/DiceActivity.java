@@ -16,15 +16,10 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
-import android.widget.ListView;
-import android.widget.SimpleAdapter;
 import android.widget.TextView;
-
-import com.google.android.gms.maps.OnMapReadyCallback;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import ballfish.util.restaurant.AfterGetListExecute;
 import ballfish.util.restaurant.Restaurant;
@@ -246,7 +241,7 @@ public class DiceActivity extends AppCompatActivity  implements NavigationView.O
 
             // 設定
         } else if (id == R.id.nav_manage) {
-            Set_Card.show(this);
+            SetCard.show(this);
         }
 
         navLayout.closeDrawer(GravityCompat.START);

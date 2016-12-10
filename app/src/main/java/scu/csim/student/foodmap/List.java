@@ -15,7 +15,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
-import android.widget.Toast;
 
 import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
@@ -25,7 +24,6 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
 
 import ballfish.util.restaurant.AfterGetListExecute;
 import ballfish.util.restaurant.Restaurant;
@@ -157,7 +155,7 @@ public class List extends AppCompatActivity implements NavigationView.OnNavigati
 
             // 設定
         } else if (id == R.id.nav_manage) {
-            Set_Card.show(this);
+            SetCard.show(this);
         }
 
         navLayout.closeDrawer(GravityCompat.START);
