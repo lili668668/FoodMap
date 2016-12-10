@@ -65,4 +65,15 @@
         android:layout_toLeftOf="@+id/again"
         android:layout_toStartOf="@+id/again" />
 
+    <Button
+        android:text="查詢店家"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/content"
+        android:layout_marginRight="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_alignParentBottom="true"
+        android:layout_toLeftOf="@+id/again"
+        android:layout_toStartOf="@+id/again" />
+
 </RelativeLayout>

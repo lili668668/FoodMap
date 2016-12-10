@@ -39,7 +39,8 @@ public class DiceActivity extends AppCompatActivity  implements NavigationView.O
 
     private TextView rest;  //表示抽到的餐廳名
     private ImageView potLeft;
-    private Button again;
+    private Button again; // 再抽一次
+    private Button content; // 查詢抽到的結果
     //Intent intent = new Intent();
 
     private SensorManager mSensorManager;   //體感(Sensor)使用管理
@@ -51,6 +52,9 @@ public class DiceActivity extends AppCompatActivity  implements NavigationView.O
     private long mLastUpdateTime;           //觸發時間
 
     boolean shake = false;  //新增用來固定抽籤結果
+    private int shakeResult = -1; // 用來紀錄抽籤結果
+
+    private ArrayList<Restaurant> restaurantArrayList; // 餐廳的清單暫存
 
     //甩動力道數度設定值
     private static final int SPEED_SHRESHOLD = 3000;
@@ -67,6 +71,8 @@ public class DiceActivity extends AppCompatActivity  implements NavigationView.O
         potLeft = (ImageView) findViewById(R.id.potLeft);
         again = (Button) findViewById(R.id.again);
         again.setOnClickListener(this);
+        content = (Button) findViewById(R.id.content);
+        content.setOnClickListener(this);
 
         // 側邊欄
         navLayout = (DrawerLayout) findViewById(R.id.activity_dice_with_drawer);
@@ -137,10 +143,39 @@ public class DiceActivity extends AppCompatActivity  implements NavigationView.O
 
     //點擊後
     public void onClick(View v) {
-        //圖片恢復抽籤前
-        potLeft.setImageDrawable(getResources().getDrawable( R.drawable.pot_left ));
-        rest.setText("再次等待抽籤");
-        shake = false;
+        switch (v.getId()) {
+            case R.id.again:
+                //圖片恢復抽籤前
+                potLeft.setImageDrawable(getResources().getDrawable( R.drawable.pot_left ));
+                rest.setText("再次等待抽籤");
+                shake = false;
+                break;
+            case R.id.content:
+                // 查詢抽到的餐廳內容
+                if (shakeResult != -1 && restaurantArrayList != null) {
+                    Restaurant rest = restaurantArrayList.get(shakeResult);
+
+                    Intent intent = new Intent(context,ListContentActivity.class);
+                    Bundle rest_data = new Bundle();
+
+                    //get value
+                    String rest_photos = rest.photos; // 取得很多圖片的檔名
+                    String rest_name = rest.name;
+                    String rest_address = rest.address;
+                    String rest_detail = rest.detail;
+
+                    //package it
+                    rest_data.putString("photos", rest_photos); // 將圖片檔名傳過去
+                    rest_data.putString("name",rest_name);
+                    rest_data.putString("address",rest_address);
+                    rest_data.putString("detail",rest_detail);
+
+                    //send
+                    intent.putExtras(rest_data);
+                    startActivity(intent);
+                }
+                break;
+        }
 
     }
 
@@ -148,14 +183,23 @@ public class DiceActivity extends AppCompatActivity  implements NavigationView.O
         // 取得店家資料
         RestaurantAPI api = RestaurantAPI.getInstance();
         try {
-            api.getList(new AfterGetListExecute() {      //在取得清單後執行
-                @Override
-                public void execute(ArrayList<Restaurant> list) {
-                    //隨機抽餐廳名稱
-                    int r = (int)(Math.random()*list.size());
-                    rest.setText(list.get(r).name + "");
-                }
-            });
+            if (restaurantArrayList == null) {
+                api.getList(new AfterGetListExecute() {      //在取得清單後執行
+                    @Override
+                    public void execute(ArrayList<Restaurant> list) {
+                        //隨機抽餐廳名稱
+                        shakeResult = (int)(Math.random()*list.size());
+                        rest.setText(list.get(shakeResult).name + "");
+
+                        // 暫存取得的清單
+                        restaurantArrayList = list;
+                    }
+                });
+            } else {
+                shakeResult = (int)(Math.random()*restaurantArrayList.size());
+                rest.setText(restaurantArrayList.get(shakeResult).name + "");
+            }
+
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -173,7 +217,7 @@ public class DiceActivity extends AppCompatActivity  implements NavigationView.O
     protected void onRestart()
     {
         super.onRestart();
-        //mSensorManager.registerListener(SensorListener,mSensor,SensorManager.SENSOR_DELAY_GAME);
+        mSensorManager.registerListener(SensorListener,mSensor,SensorManager.SENSOR_DELAY_GAME);
     }
 
 
