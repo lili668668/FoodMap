@@ -1,9 +1,12 @@
 package scu.csim.student.foodmap;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -23,6 +26,10 @@ public class ListContentActivity extends AppCompatActivity {
     TextView resdetail;
     TextView resaddress;
 
+    Button navigation;
+
+    Bundle rest_data; // 這個頁面的餐廳資訊暫存
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,8 +43,10 @@ public class ListContentActivity extends AppCompatActivity {
         resdetail = (TextView) findViewById(R.id.detail_textView);
         resaddress = (TextView) findViewById(R.id.address_textView);
 
+        navigation = (Button) findViewById(R.id.navigation_button);
+
         //get bundle(restaurant data)
-        Bundle rest_data = getIntent().getExtras();
+        rest_data = getIntent().getExtras();
         String rest_photos = rest_data.getString("photos"); // 取得圖片檔名
         String rest_name = rest_data.getString("name");
         String rest_address = rest_data.getString("address");
@@ -69,6 +78,15 @@ public class ListContentActivity extends AppCompatActivity {
         restTitle.setText(rest_name);
         resdetail.setText(rest_detail);
         resaddress.setText(rest_address);
+
+        navigation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context,MainActivity.class);
+                intent.putExtras(rest_data);
+                startActivity(intent);
+            }
+        });
 
     }
 }

@@ -31,6 +31,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import ballfish.util.map.Directions;
 import ballfish.util.map.Helper;
 import ballfish.util.restaurant.AfterGetListExecute;
 import ballfish.util.restaurant.Restaurant;
@@ -71,6 +72,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+
+        Bundle rest_data = getIntent().getExtras();
+        if (rest_data != null) {
+            String address = rest_data.getString("address");
+            ((MyLocationListener) locationListener).setNeedToDraw(Helper.getLatLngByAddress(address));
+        }
     }
 
     @Override

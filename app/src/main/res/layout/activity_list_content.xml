@@ -71,10 +71,17 @@
                 android:layout_toRightOf="@+id/textView5"
                 android:layout_toEndOf="@+id/textView5" />
 
-            <LinearLayout
+            <Button
+                android:text="@string/navigation"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/address_textView"
+                android:id="@+id/navigation_button" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/navigation_button"
                 android:id="@+id/photos_view"
                 android:orientation="vertical">
             </LinearLayout>
