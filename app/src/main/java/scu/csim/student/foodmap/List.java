@@ -157,7 +157,7 @@ public class List extends AppCompatActivity implements NavigationView.OnNavigati
 
             // 設定
         } else if (id == R.id.nav_manage) {
-
+            Set_Card.show(this);
         }
 
         navLayout.closeDrawer(GravityCompat.START);

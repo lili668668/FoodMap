@@ -202,7 +202,7 @@ public class DiceActivity extends AppCompatActivity  implements NavigationView.O
 
             // 設定
         } else if (id == R.id.nav_manage) {
-
+            Set_Card.show(this);
         }
 
         navLayout.closeDrawer(GravityCompat.START);

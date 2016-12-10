@@ -17,4 +17,12 @@
     <string name="nav_map">美食地圖</string>
     <string name="nav_random">隨機美食</string>
     <string name="qrcode">美食確認</string>
+
+    <string name="setting_line_option">請選擇交通方式</string>
+    <string name="radio_walk">走路</string>
+    <string name="radio_bicycle">騎腳踏車</string>
+    <string name="radio_transit">大眾運輸工具</string>
+    <string name="radio_car">開車</string>
+    
+    <string name="navigation">導航</string>
 </resources>

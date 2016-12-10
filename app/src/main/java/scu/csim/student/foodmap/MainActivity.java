@@ -4,7 +4,6 @@ import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.provider.Settings;
@@ -14,22 +13,24 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.RadioGroup;
 import android.widget.Toast;
 
-import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.io.IOException;
 import java.util.ArrayList;
 
-import ballfish.util.map.Directions;
 import ballfish.util.map.Helper;
 import ballfish.util.restaurant.AfterGetListExecute;
 import ballfish.util.restaurant.Restaurant;
@@ -117,7 +118,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         // 設定
         } else if (id == R.id.nav_manage) {
-
+            Set_Card.show(this);
         }
 
         navLayout.closeDrawer(GravityCompat.START);
@@ -162,10 +163,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         if (test == null) {
                             System.out.println(rest.name + " is null");
                         } else {
-                            mMap.addMarker(new MarkerOptions()
+                            MarkerOptions tmp = new MarkerOptions()
                                     .position(test)
                                     .title(rest.name)
-                                    .snippet(rest.detail));
+                                    .snippet(rest.detail);
+                            int inttmp = getIconFromClass(rest._class);
+                            if (inttmp != 0) {
+                                tmp.icon(BitmapDescriptorFactory.fromResource(inttmp));
+                            }
+                            
+                            mMap.addMarker(tmp);
                             mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
                                 @Override
                                 public boolean onMarkerClick(Marker marker) {
@@ -227,5 +234,21 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
         }
 
+    }
+
+    private int getIconFromClass(String _class) {
+        switch (_class) {
+            case "noodle":
+                return R.drawable.noodle;
+            case "rice":
+                return R.drawable.rice;
+            case "pizza":
+                return R.drawable.pizza;
+            case "dumpling":
+                return R.drawable.dumpling;
+            case "hamburger":
+                return R.drawable.hamburger;
+        }
+        return 0;
     }
 }
