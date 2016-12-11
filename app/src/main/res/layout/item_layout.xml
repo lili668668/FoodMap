@@ -3,6 +3,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:paddingRight="12dp"
+    android:paddingLeft="12dp"
+    android:paddingTop="5dp"
+    android:paddingEnd="5dp"
     android:orientation="vertical">
 
 
@@ -14,7 +18,8 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:id="@+id/name_text"
-        android:textSize="24sp" />
+        android:textSize="24sp"
+        android:textColor="@color/cast_intro_overlay_background_color" />
 
     <TextView
         android:text="TextView"

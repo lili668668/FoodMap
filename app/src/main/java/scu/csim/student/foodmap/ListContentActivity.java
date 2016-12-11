@@ -45,6 +45,7 @@ public class ListContentActivity extends AppCompatActivity {
 
         navigation = (Button) findViewById(R.id.navigation_button);
 
+
         //get bundle(restaurant data)
         rest_data = getIntent().getExtras();
         String rest_photos = rest_data.getString("photos"); // 取得圖片檔名
@@ -61,6 +62,7 @@ public class ListContentActivity extends AppCompatActivity {
             for(int cnt = 0;cnt < rest_photos_arr.length;cnt++) {
                 // 新增一個ImageView
                 ImageView im = new ImageView(context);
+                im.getLayoutParams().width = 500;
                 PhotosList.addView(im);
 
                 // 圖片的網址

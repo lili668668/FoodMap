@@ -16,7 +16,8 @@
         android:layout_height="wrap_content">
         <RelativeLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            >
 
             <TextView
                 android:text="TextView"
@@ -26,39 +27,32 @@
                 android:layout_alignParentStart="true"
                 android:layout_marginTop="38dp"
                 android:id="@+id/restTitle_textView"
-                android:textSize="36sp" />
+                android:textSize="36sp"
+                android:textColor="@color/cast_expanded_controller_background_color"
+                android:textStyle="normal|bold" />
 
             <TextView
-                android:text="小編評價："
+                android:text="detail_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/restTitle_textView"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
-                android:layout_marginTop="38dp"
-                android:id="@+id/textView3"
-                android:textSize="24sp" />
-
-            <TextView
-                android:text="TextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignBottom="@+id/textView3"
-                android:layout_toRightOf="@+id/textView3"
-                android:layout_toEndOf="@+id/textView3"
+                android:layout_marginTop="8dp"
                 android:id="@+id/detail_textView"
-                android:textSize="24sp" />
+                android:textSize="20sp" />
 
             <TextView
                 android:text="地址："
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/textView3"
+                android:layout_below="@+id/detail_textView"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
                 android:layout_marginTop="33dp"
                 android:id="@+id/textView5"
-                android:textSize="18sp" />
+                android:textSize="18sp"
+                android:textColor="@color/cast_expanded_controller_background_color" />
 
             <TextView
                 android:text="TextView"
@@ -69,17 +63,19 @@
                 android:layout_alignBaseline="@+id/textView5"
                 android:layout_alignBottom="@+id/textView5"
                 android:layout_toRightOf="@+id/textView5"
-                android:layout_toEndOf="@+id/textView5" />
+                android:layout_toEndOf="@+id/textView5"
+                android:textColor="@color/cast_expanded_controller_background_color" />
 
             <Button
                 android:text="@string/navigation"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/address_textView"
+                android:layout_marginTop="2dp"
                 android:id="@+id/navigation_button" />
 
             <LinearLayout
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/navigation_button"
                 android:id="@+id/photos_view"
