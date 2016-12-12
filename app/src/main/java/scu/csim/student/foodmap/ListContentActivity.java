@@ -62,7 +62,6 @@ public class ListContentActivity extends AppCompatActivity {
             for(int cnt = 0;cnt < rest_photos_arr.length;cnt++) {
                 // 新增一個ImageView
                 ImageView im = new ImageView(context);
-                im.getLayoutParams().width = 500;
                 PhotosList.addView(im);
 
                 // 圖片的網址
