@@ -25,7 +25,8 @@ public class RestaurantJSONParser {
             for (int cnt = 0; cnt < jRestaurants.length(); cnt++) {
                 JSONObject row = (JSONObject) jRestaurants.get(cnt);
                 String name = row.getString("name");
-                String detail = row.getString("detail");
+                String tmp = row.getString("detail");
+                String detail = tmp.replace("\\n", "\n");
                 String address = row.getString("address");
                 String photos = row.getString("photos");
                 String _class = row.getString("class");
