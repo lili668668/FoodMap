@@ -44,7 +44,8 @@ public class SetCard {
         }
 
         AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-        builder.setView(set_layout);
+        builder.setView(set_layout)
+                .setTitle(R.string.setting_line_option);
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
 

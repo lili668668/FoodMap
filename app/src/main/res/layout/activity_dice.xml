@@ -25,11 +25,13 @@
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:srcCompat="@drawable/brown"
+        android:background="@drawable/brown"
         android:id="@+id/restBKG"
         android:layout_above="@+id/again"
-        android:layout_alignRight="@+id/again"
-        android:layout_alignEnd="@+id/again" />
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignRight="@+id/shake"
+        android:layout_alignEnd="@+id/shake" />
 
     <ImageView
         android:layout_width="wrap_content"
