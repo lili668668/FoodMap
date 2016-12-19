@@ -45,6 +45,7 @@ public class ListContentActivity extends AppCompatActivity {
 
         navigation = (Button) findViewById(R.id.navigation_button);
 
+
         //get bundle(restaurant data)
         rest_data = getIntent().getExtras();
         String rest_photos = rest_data.getString("photos"); // 取得圖片檔名
