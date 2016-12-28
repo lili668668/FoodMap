@@ -157,7 +157,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 public void execute(ArrayList<Restaurant> list) {
                 LatLng test;
                 if (list == null || list.size() == 0) {
-                    Toast.makeText(context, "收不到資料", Toast.LENGTH_SHORT).show();test = Helper.getLatLngByAddress("100台北市中正區貴陽街一段56號");
+                    Toast.makeText(context, "收不到資料", Toast.LENGTH_SHORT).show();
+                    test = Helper.getLatLngByAddress("100台北市中正區貴陽街一段56號");
                 } else {
                     for (int cnt = 0;cnt < list.size();cnt++) {
                         Restaurant rest = list.get(cnt);
@@ -230,9 +231,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         switch (requestCode) {
             case REQUEST_GPS:
-                if (grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
-                    updateGPS();
-                }
+                updateGPS();
                 break;
         }
 

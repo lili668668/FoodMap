@@ -92,7 +92,7 @@ public class MyLocationListener implements android.location.LocationListener {
     }
 
     private void draw() {
-        if (nowMarker != null && needToDraw != null) {
+        if (nowMarker != null && needToDraw != null && this.map != null) {
             directions.draw(context, nowMarker.getPosition(), needToDraw, map, sp.getString("line_option", Directions.MODE_WALKING));
         }
     }

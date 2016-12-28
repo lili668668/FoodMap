@@ -16,7 +16,7 @@
     <TextView
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:text="no record in the List!"
+    android:text="正在為您拼命加載中\n若太久沒加載完畢可能為網路不穩"
     android:id="@+id/empty_view"/>
 
 </LinearLayout>
