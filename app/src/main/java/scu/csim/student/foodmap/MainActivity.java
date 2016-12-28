@@ -77,10 +77,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     protected void onResume() {
-        if (locationManager == null) {
-            locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-            locationListener = new MyLocationListener(context);
-        }
 
         updateGPS();
 
@@ -162,7 +158,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 } else {
                     for (int cnt = 0;cnt < list.size();cnt++) {
                         Restaurant rest = list.get(cnt);
-                        test = Helper.getLatLngByAddress(rest.address);
+                        test = new LatLng(rest.lat, rest.lng);
                         if (test == null) {
                             System.out.println(rest.name + " is null");
                         } else {
@@ -174,7 +170,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                             if (inttmp != 0) {
                                 tmp.icon(BitmapDescriptorFactory.fromResource(inttmp));
                             }
-                            
+
                             mMap.addMarker(tmp);
                             mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
                                 @Override
@@ -198,7 +194,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private void openGPS() {
         boolean gps = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
         boolean network = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
-        if (gps || network) {
+        if (gps && network) {
             return ;
         } else {
             Intent gpsIntent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
@@ -207,22 +203,24 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private void updateGPS() {
+        openGPS();
         if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
                 && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[] {
                     Manifest.permission.ACCESS_FINE_LOCATION, android.Manifest.permission.ACCESS_COARSE_LOCATION}, REQUEST_GPS);
         } else {
+            if (locationManager == null) {
+                locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+                locationListener = new MyLocationListener(context);
+            }
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
             locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
         }
     }
 
     private void removeGPS() {
-        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
-                && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[] {
-                    Manifest.permission.ACCESS_FINE_LOCATION, android.Manifest.permission.ACCESS_COARSE_LOCATION}, REQUEST_GPS);
-        } else {
+        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             locationManager.removeUpdates(locationListener);
         }
     }

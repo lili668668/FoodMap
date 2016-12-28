@@ -90,40 +90,40 @@ public class List extends AppCompatActivity implements NavigationView.OnNavigati
                     simpleAdapter.notifyDataSetChanged();
 
                     restaurantList = list;
+
+                    list_view.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                            if (restaurantList != null) {
+                                Restaurant rest = restaurantList.get(position);
+
+                                Intent intent = new Intent(context,ListContentActivity.class);
+                                Bundle rest_data = new Bundle();
+
+                                //get value
+                                String rest_photos = rest.photos; // 取得很多圖片的檔名
+                                String rest_name = rest.name;
+                                String rest_address = rest.address;
+                                String rest_detail = rest.detail;
+
+                                //package it
+                                rest_data.putString("photos", rest_photos); // 將圖片檔名傳過去
+                                rest_data.putString("name",rest_name);
+                                rest_data.putString("address",rest_address);
+                                rest_data.putString("detail",rest_detail);
+
+                                //send
+                                intent.putExtras(rest_data);
+                                startActivity(intent);
+                            }
+                        }
+                    });
                 }
             });
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        context = this;
-        list_view.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if (restaurantList != null) {
-                    Restaurant rest = restaurantList.get(position);
-
-                    Intent intent = new Intent(context,ListContentActivity.class);
-                    Bundle rest_data = new Bundle();
-
-                    //get value
-                    String rest_photos = rest.photos; // 取得很多圖片的檔名
-                    String rest_name = rest.name;
-                    String rest_address = rest.address;
-                    String rest_detail = rest.detail;
-
-                    //package it
-                    rest_data.putString("photos", rest_photos); // 將圖片檔名傳過去
-                    rest_data.putString("name",rest_name);
-                    rest_data.putString("address",rest_address);
-                    rest_data.putString("detail",rest_detail);
-
-                    //send
-                    intent.putExtras(rest_data);
-                    startActivity(intent);
-                }
-            }
-        });
 
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
