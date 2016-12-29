@@ -9,9 +9,9 @@
     android:id="@+id/activity_list_with_drawer">
 
     <include
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        layout="@layout/activity_list" />
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        layout="@layout/list_add_toolbar" />
 
     <android.support.design.widget.NavigationView
         android:id="@+id/nav_list_view"

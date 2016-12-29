@@ -4,8 +4,10 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -74,6 +76,14 @@ public class DiceActivity extends AppCompatActivity  implements NavigationView.O
         navView = (NavigationView) findViewById(R.id.nav_dice_view);
         navView.setNavigationItemSelectedListener(this);
         context = getApplicationContext();
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, navLayout, toolbar,  R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        navLayout.setDrawerListener(toggle);
+        toggle.syncState();
 
         //取得體感(Sensor)服務使用權限
         mSensorManager = (SensorManager) this.getSystemService(Context.SENSOR_SERVICE);

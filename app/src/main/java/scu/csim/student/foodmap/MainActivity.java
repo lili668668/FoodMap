@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.LocationManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
@@ -12,7 +13,9 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.widget.Toast;
 
@@ -50,6 +53,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private static final int REQUEST_GPS = 492;
     private static final int OPEN_GPS = 493;
 
+    // bundle
+    private Bundle rest_data = null;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,15 +67,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         navView = (NavigationView) findViewById(R.id.nav_map_view);
         navView.setNavigationItemSelectedListener(this);
 
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, navLayout, toolbar,  R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        navLayout.setDrawerListener(toggle);
+        toggle.syncState();
+
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
-        Bundle rest_data = getIntent().getExtras();
-        if (rest_data != null) {
-            String address = rest_data.getString("address");
-            ((MyLocationListener) locationListener).setNeedToDraw(Helper.getLatLngByAddress(address));
-        }
+        rest_data = getIntent().getExtras();
     }
 
     @Override
@@ -183,13 +193,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        if (rest_data != null) {
+            String address = rest_data.getString("address");
+            ((MyLocationListener) locationListener).setNeedToDraw(Helper.getLatLngByAddress(address));
+        }
     }
 
     private void requireGPS() {
-        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
-                && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[] {
-                    Manifest.permission.ACCESS_FINE_LOCATION, android.Manifest.permission.ACCESS_COARSE_LOCATION}, REQUEST_GPS);
+        boolean version = (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP);
+        boolean fine = (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED);
+        boolean core = (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED);
+        if (version && fine && core) {
+                ActivityCompat.requestPermissions(this, new String[] {
+                        Manifest.permission.ACCESS_FINE_LOCATION, android.Manifest.permission.ACCESS_COARSE_LOCATION}, REQUEST_GPS);
         } else {
             if (locationManager == null) {
                 locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
