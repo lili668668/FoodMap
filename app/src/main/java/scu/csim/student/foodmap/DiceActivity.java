@@ -182,12 +182,16 @@ public class DiceActivity extends AppCompatActivity  implements NavigationView.O
                 api.getList(new AfterGetListExecute() {      //在取得清單後執行
                     @Override
                     public void execute(ArrayList<Restaurant> list) {
-                        //隨機抽餐廳名稱
-                        shakeResult = (int)(Math.random()*list.size());
-                        rest.setText(list.get(shakeResult).name + "");
 
-                        // 暫存取得的清單
-                        restaurantArrayList = list;
+                        if (list != null) {
+                            //隨機抽餐廳名稱
+                            shakeResult = (int)(Math.random()*list.size());
+                            rest.setText(list.get(shakeResult).name + "");
+
+                            // 暫存取得的清單
+                            restaurantArrayList = list;
+                        }
+
                     }
                 });
             } else {

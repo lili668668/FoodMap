@@ -75,6 +75,11 @@ public class List extends AppCompatActivity implements NavigationView.OnNavigati
             api.getList(new AfterGetListExecute() {
                 @Override
                 public void execute(ArrayList<Restaurant> list) {
+
+                    if (list == null) {
+                        return;
+                    }
+
                     ArrayList<HashMap<String, Object>> items = new ArrayList<HashMap<String, Object>>();
 
                     for (int cnt = 0; cnt < list.size() ; cnt++) {

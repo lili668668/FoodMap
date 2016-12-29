@@ -48,6 +48,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private android.location.LocationListener locationListener;
     private LocationManager locationManager;
     private static final int REQUEST_GPS = 492;
+    private static final int OPEN_GPS = 493;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,10 +61,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         navView = (NavigationView) findViewById(R.id.nav_map_view);
         navView.setNavigationItemSelectedListener(this);
 
-        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        locationListener = new MyLocationListener(context);
-        openGPS();
-
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
@@ -73,14 +70,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             String address = rest_data.getString("address");
             ((MyLocationListener) locationListener).setNeedToDraw(Helper.getLatLngByAddress(address));
         }
-    }
-
-    @Override
-    protected void onResume() {
-
-        updateGPS();
-
-        super.onResume();
     }
 
     @Override
@@ -144,6 +133,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
+        requireGPS();
+
+        if (locationListener == null) {
+            return;
+        }
+
         ((MyLocationListener) locationListener).setMap(googleMap);
 
         RestaurantAPI api = RestaurantAPI.getInstance();
@@ -154,7 +149,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 LatLng test;
                 if (list == null || list.size() == 0) {
                     Toast.makeText(context, "收不到資料", Toast.LENGTH_SHORT).show();
-                    test = Helper.getLatLngByAddress("100台北市中正區貴陽街一段56號");
                 } else {
                     for (int cnt = 0;cnt < list.size();cnt++) {
                         Restaurant rest = list.get(cnt);
@@ -191,19 +185,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
-    private void openGPS() {
-        boolean gps = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
-        boolean network = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
-        if (gps && network) {
-            return ;
-        } else {
-            Intent gpsIntent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-            startActivity(gpsIntent);
-        }
-    }
-
-    private void updateGPS() {
-        openGPS();
+    private void requireGPS() {
         if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
                 && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[] {
@@ -213,8 +195,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
                 locationListener = new MyLocationListener(context);
             }
-            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
-            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
+
+            boolean gps = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+            boolean network = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+            if (gps && network) {
+                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 10, locationListener);
+                locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1000, 10, locationListener);
+            } else {
+                Intent gpsIntent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                startActivityForResult(gpsIntent, OPEN_GPS);
+            }
         }
     }
 
@@ -229,10 +219,24 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         switch (requestCode) {
             case REQUEST_GPS:
-                updateGPS();
+                if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
+                        && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                    onMapReady(mMap);
+                }
                 break;
         }
 
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        // Check which request we're responding to
+        if (requestCode == OPEN_GPS) {
+            // Make sure the request was successful
+            if (resultCode == RESULT_CANCELED) {
+                onMapReady(mMap);
+            }
+        }
     }
 
     private int getIconFromClass(String _class) {
